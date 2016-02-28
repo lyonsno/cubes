@@ -64,7 +64,18 @@ int main()
     bool running = true;
     while (!glfwWindowShouldClose(window))
     {
-    	
+    	double now = glfwGetTime();
+        double delta = now - game->getlastTime();
+        game->setLastTime(now);
+
+        game->increaseElapsed(delta);
+
+        while(game->getElapsed() >= game->getTimeStep()) // OPTIMAL_TIME = 1 / 60
+        {
+                 //tick
+
+                game->resetElapsed();
+        }
     	game.draw();
         // end the current frame (internally swaps the front and back buffers)
         glfwSwapBuffers(window);

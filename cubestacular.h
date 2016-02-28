@@ -16,6 +16,9 @@ class Cubestacular
 {
 private:
 	ShaderCreator shaderCreator;
+	double lastTime;
+	double elapsedTime;
+	double timeStep;
 public:
 	Cubestacular();
 	Cube cubeData;
@@ -35,6 +38,12 @@ public:
 	void initGL();
 	void initBuffers();
 	void initShaders();
+
+	//get/set
+	double setLastTime(double now);
+	void increaseElapsed(double step);
+	double getElapsed();
+	void resetElapsed();
 
 	//UI
 	void handleMouseDown(double xpos, double ypos);

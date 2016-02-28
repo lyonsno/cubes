@@ -1,6 +1,7 @@
 #include "cubestacular.h"
 
 Cubestacular::Cubestacular()
+: lastTime(0.0), elapsedTime(0.0), timeStep(0.01)
 {	
     std::cout<<"made it to cubestacular constructor"<<std::endl;
 	cubeData = Cube();
@@ -61,6 +62,26 @@ void Cubestacular::initShaders()
     // GLuint lightPosLoc = glGetUniformLocation(shaderprogram, "lightPosition");
     // GLuint eyePosLoc = glGetUniformLocation(shaderprogram, "eyePosition");
     glUseProgram(shaderProgram);
+}
+
+double Cubestacular::setLastTime(double now)
+{
+    lastTime = now;
+}
+
+void Cubestacular::increaseElapsed(double step)
+{
+    elapsedTime += step;
+}
+
+double Cubestacular::getElapsed()
+{
+    return elapsedTime;
+}
+
+void Cubestacular::resetElapsed()
+{
+    elapsedTime = 0.0;
 }
 
 void Cubestacular::handleMouseDown(double xpos, double ypos)
