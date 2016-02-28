@@ -1,0 +1,4 @@
+glm
+*.o
+main
+.DS_Store
