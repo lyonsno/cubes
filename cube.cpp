@@ -63,6 +63,22 @@ Cube::Cube()
     vertices.push_back(glm::vec3(1.0f,1.0f,0.0f));
     normals.push_back(glm::vec3(1.0f,0.0f,0.0f));
 
+    shift();
+
     Geometry::populateAttributes();
 
+}
+
+//move verts so center is at origin
+void Cube::shift()
+{
+    glm::mat4 shiftMatrix = glm::translate(glm::mat4(), glm::vec3(-0.5f, -0.5f, -0.5f));
+    for (auto &vert : Geometry::vertices )
+    {
+        glm::vec4 dummyVert = glm::vec4(vert, 1.0);
+        dummyVert = shiftMatrix * dummyVert;
+        vert.x = dummyVert.x;
+        vert.y = dummyVert.y;
+        vert.z = dummyVert.z;
+    }
 }

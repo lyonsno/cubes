@@ -10,6 +10,7 @@
 #include "shaderCreator.h"
 #include "light.h"
 #include "object.h"
+#include "collisionPlane.h"
 
 class Cubestacular
 {
@@ -19,15 +20,24 @@ public:
 	Cubestacular();
 	Cube cubeData;
 	std::vector<Object> cubes;
+	CollisionPlane collisionPlane;
 	Camera camera;
 	Light light;
+
+
 	GLuint shaderProgram;
 	GLuint cubeBufferId;
 	GLuint cubeVAOId;
 
 	void draw();
+
+	//init
 	void initGL();
 	void initBuffers();
 	void initShaders();
+
+	//UI
+	void handleMouseDown(double xpos, double ypos);
+	void handleWindowResize(int width, int height);
 };
 #endif

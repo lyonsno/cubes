@@ -2,13 +2,16 @@
 
 Cubestacular::Cubestacular()
 {	
+    std::cout<<"made it to cubestacular constructor"<<std::endl;
 	cubeData = Cube();
-    Object cube = Object(cubeData);
+    Object cube = Object(cubeData, glm::vec3(0,0,0));
 	cubes.push_back(cube);
-	camera = Camera(glm::vec3(0, 0.5, -8.0), glm::vec3(0,0,1),glm::vec3(0,1,0),
-                                							  45.0f, 0.1f, 50.0f);
+	camera = Camera(glm::vec3(0.0, 0.0, -8.0), glm::vec3(0.0,0.0,1.0),glm::vec3(0.0,1.0,0.0),
+                                  							  45.0f, 0.1f, 20.0f);
+    collisionPlane = CollisionPlane(1.0, &camera);
 	shaderCreator = ShaderCreator();
 	Light myLight = Light();
+    std::cout<<"made it through cubestacular constructor"<<std::endl;
 }
 
 void Cubestacular::draw()
@@ -16,9 +19,13 @@ void Cubestacular::draw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderProgram);
     glBindVertexArray(cubeVAOId);
-    glUniformMatrix4fv(camera.VPloc, 1, GL_FALSE, &(camera.getVPMatrix() * cubes[0].getModelMatrix())[0][0]);
-    // glUniform3fv(lightPosLoc, 1, &myLight->getPosition()[0]);
-    glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 1);
+    for (auto& cube : cubes)
+    {   
+        cube.tumble(0.002);
+        glUniformMatrix4fv(camera.VPloc, 1, GL_FALSE, &(camera.getVPMatrix() * cube.getModelMatrix())[0][0]);
+        // glUniform3fv(lightPosLoc, 1, &myLight->getPosition()[0]);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 1);    
+    }
 }
 
 void Cubestacular::initGL()
@@ -54,4 +61,15 @@ void Cubestacular::initShaders()
     // GLuint lightPosLoc = glGetUniformLocation(shaderprogram, "lightPosition");
     // GLuint eyePosLoc = glGetUniformLocation(shaderprogram, "eyePosition");
     glUseProgram(shaderProgram);
+}
+
+void Cubestacular::handleMouseDown(double xpos, double ypos)
+{
+    glm::vec4 worldPoint = collisionPlane.worldFromScreenCoords(xpos, ypos);
+    cubes.push_back(Object(cubeData, glm::vec3(worldPoint)));
+}
+
+void Cubestacular::handleWindowResize(int width, int height)
+{
+    camera.updateWindowSize(width, height);
 }

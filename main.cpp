@@ -21,8 +21,16 @@ static void mouse_button_callback(GLFWwindow* window, int button, int action, in
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
         std::cout<<"mouse: "<<xpos<<", "<<ypos<<std::endl;
-
+        Cubestacular * game = reinterpret_cast<Cubestacular *>(glfwGetWindowUserPointer(window));
+        game->handleMouseDown(xpos, ypos);
     }
+}
+
+static void window_size_callback(GLFWwindow* window, int width, int height)
+{
+	std::cout<<width<<"::"<<height<<std::endl;
+    Cubestacular * game = reinterpret_cast<Cubestacular *>(glfwGetWindowUserPointer(window));
+    game->handleWindowResize(width, height);
 }
 
 int main()
@@ -43,25 +51,21 @@ int main()
     glfwSwapInterval(1);
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetWindowSizeCallback(window, window_size_callback);
     
-    Cubestacular* game = new Cubestacular();
+    Cubestacular game = Cubestacular();
 
-    game->initGL();
-   
+    // initialize objects buffers and shaders 
+    game.initGL();
+    std::cout<<"GL initiated"<<std::endl;
+    // set pointer for UI callbacks
+   	glfwSetWindowUserPointer(window, &game);
 
     bool running = true;
-    float xAxis = 0;
-    bool grow = true;
     while (!glfwWindowShouldClose(window))
     {
-        // rotation code
-        if (grow) xAxis++;
-        else xAxis--;
-        game->cubes[0].rotate(0.05, glm::vec3(fmod(xAxis/100.0,1.0),1,0));
-        if (xAxis >= 100.0) grow = false;
-        if (xAxis <= 1.0) grow = true;
     	
-    	game->draw();
+    	game.draw();
         // end the current frame (internally swaps the front and back buffers)
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -69,8 +73,6 @@ int main()
             glfwSetWindowShouldClose (window, 1);
         }
     }
-    // glDeleteBuffers(1, &cubeBufferId);
-
     // release resources...
     glfwDestroyWindow(window);
     glfwTerminate();

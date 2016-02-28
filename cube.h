@@ -7,5 +7,6 @@ class Cube : public Geometry
 {
 public:
 	Cube();
+	void shift();
 };
 #endif

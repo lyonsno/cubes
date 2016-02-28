@@ -1,13 +1,13 @@
 CFLAGS=$(shell pkg-config --cflags glfw3)
 LIBS=$(shell pkg-config --static --libs glfw3)
 
-main: main.o camera.o shaderCreator.o cube.o light.o cubestacular.o object.o geometry.o
-	g++ $(CFLAGS) -o main main.o camera.o shaderCreator.o cube.o light.o cubestacular.o geometry.o object.o $(LIBS)
+main: main.o camera.o shaderCreator.o cube.o light.o cubestacular.o object.o geometry.o collisionPlane.o cubeLauncher.o
+	g++ $(CFLAGS) -o main main.o camera.o shaderCreator.o cube.o light.o cubestacular.o geometry.o object.o collisionPlane.o cubeLauncher.o $(LIBS)
 
 main.o: main.cpp
 	g++ $(CFLAGS) -c main.cpp $(LIBS)
 
-cubestacular.o: cubestacular.cpp
+cubestacular.o: cubestacular.cpp cubestacular.h
 	g++ $(CFLAGS) -c cubestacular.cpp $(LIBS)
 
 camera.o: camera.cpp camera.h
@@ -28,6 +28,12 @@ object.o: object.cpp object.h
 geometry.o: geometry.cpp geometry.h
 	g++ $(CFLAGS) -c geometry.cpp $(LIBS)
 
+collisionPlane.o: collisionPlane.cpp collisionPlane.h
+	g++ $(CFLAGS) -c collisionPlane.cpp $(LIBS)
+
+cubeLauncher.o: cubeLauncher.cpp cubeLauncher.h
+	g++ $(CFLAGS) -c cubeLauncher.cpp $(LIBS)
+
 clean:
-	rm -rf main main.o cubestacular.o camera.o shaderCreator.o cube.o light.o geometry.o object.o
+	rm -rf main main.o cubestacular.o camera.o shaderCreator.o cube.o light.o geometry.o object.o collisionPlane.o cubeLauncher.o
 

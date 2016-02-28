@@ -16,6 +16,13 @@ private:
 	glm::mat4 projectionMatrix;
 	float clipNear;
 	float clipFar;
+	int clientWidth;
+	int clientHeight;
+	glm::vec3 position;
+	glm::vec3 center;
+	glm::vec3 up;
+	glm::vec3 direction;
+	glm::vec3 right;
 
 public:
 	Camera();
@@ -23,6 +30,16 @@ public:
 	glm::mat4 getVPMatrix();
 	glm::mat4 getProjectionMatrix();
 	glm::mat4 getViewMatrix();
+	glm::vec3 getPosition();
+	glm::vec3 getDirection();
+	glm::vec3 getRight();
+	glm::vec3 getUp();
+	float getNear();
+	float getFar();
+	float getFov();
+	const int getClientWidth();
+	const int getClientHeight();
+	void updateWindowSize(int width, int height);
 	GLuint VPloc;
 };
 #endif
