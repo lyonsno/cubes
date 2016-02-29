@@ -1,15 +1,15 @@
 #include "cubestacular.h"
 
 Cubestacular::Cubestacular()
-: lastTime(0.0), elapsedTime(0.0), timeStep(0.01)
+: lastTime(0.0), elapsedTime(0.0), timeStep(0.01), children(5), launcher(CubeLauncher(0.01))
 {	
     std::cout<<"made it to cubestacular constructor"<<std::endl;
-	cubeData = Cube();
-    Object cube = Object(cubeData, glm::vec3(0,0,0));
-	cubes.push_back(cube);
-	camera = Camera(glm::vec3(0.0, 0.0, -8.0), glm::vec3(0.0,0.0,1.0),glm::vec3(0.0,1.0,0.0),
-                                  							  45.0f, 0.1f, 20.0f);
-    collisionPlane = CollisionPlane(1.0, &camera);
+	cubeGeometry = Cube();
+    Object cube = Object(cubeGeometry, glm::vec3(0,0,0));
+	targets.push_back(cube);
+	camera = Camera(glm::vec3(0.0, 2.0, -2.0), glm::vec3(0.0,4.0,1.0),glm::vec3(0.0,1.0,0.0),
+                                  							  45.0f, 0.1f, 50.0f);
+    collisionPlane = CollisionPlane(10.0, &camera);
 	shaderCreator = ShaderCreator();
 	Light myLight = Light();
     std::cout<<"made it through cubestacular constructor"<<std::endl;
@@ -17,11 +17,26 @@ Cubestacular::Cubestacular()
 
 void Cubestacular::draw()
 {
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderProgram);
     glBindVertexArray(cubeVAOId);
-    for (auto& cube : cubes)
+    // for (auto& cube : targets)
+    // {   
+    //     cube.tumble(0.002);
+    //     glUniformMatrix4fv(camera.VPloc, 1, GL_FALSE, &(camera.getVPMatrix() * cube.getModelMatrix())[0][0]);
+    //     // glUniform3fv(lightPosLoc, 1, &myLight->getPosition()[0]);
+    //     glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 1);    
+    // }
+
+    for (auto& cube : launcher.getCubes())
     {   
+        Object& target = cube.getTarget();
+        target.tumble(0.002);
+        glUniformMatrix4fv(camera.VPloc, 1, GL_FALSE, &(camera.getVPMatrix() * target.getModelMatrix())[0][0]);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 36, 1);
+        
+        if (!cube.hasLaunched()) continue;   
         cube.tumble(0.002);
         glUniformMatrix4fv(camera.VPloc, 1, GL_FALSE, &(camera.getVPMatrix() * cube.getModelMatrix())[0][0]);
         // glUniform3fv(lightPosLoc, 1, &myLight->getPosition()[0]);
@@ -29,6 +44,10 @@ void Cubestacular::draw()
     }
 }
 
+void Cubestacular::stepSim()
+{
+    launcher.step();
+}
 void Cubestacular::initGL()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -39,8 +58,8 @@ void Cubestacular::initGL()
 
 void Cubestacular::initBuffers()
 {
-	const std::vector<glm::vec3>& vertices = cubes[0].getGeometry().getVertices();
-    const std::vector<VertexAttribute>& vertexAttributes = cubes[0].getGeometry().getAttributes();
+	const std::vector<glm::vec3>& vertices = targets[0].getGeometry().getVertices();
+    const std::vector<VertexAttribute>& vertexAttributes = targets[0].getGeometry().getAttributes();
 
     glGenBuffers(1, &cubeBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, cubeBufferId);
@@ -64,9 +83,14 @@ void Cubestacular::initShaders()
     glUseProgram(shaderProgram);
 }
 
-double Cubestacular::setLastTime(double now)
+void Cubestacular::setLastTime(double now)
 {
     lastTime = now;
+}
+
+double Cubestacular::getLastTime()
+{
+    return lastTime;
 }
 
 void Cubestacular::increaseElapsed(double step)
@@ -84,10 +108,21 @@ void Cubestacular::resetElapsed()
     elapsedTime = 0.0;
 }
 
+double Cubestacular::getTimeStep()
+{
+    return timeStep;
+}
+
 void Cubestacular::handleMouseDown(double xpos, double ypos)
 {
     glm::vec4 worldPoint = collisionPlane.worldFromScreenCoords(xpos, ypos);
-    cubes.push_back(Object(cubeData, glm::vec3(worldPoint)));
+    targets.push_back(Object(cubeGeometry, glm::vec3(worldPoint)));
+    launcher.quebe(Projectile(cubeGeometry, children, Object(cubeGeometry, glm::vec3(worldPoint))));
+}
+
+void Cubestacular::handleKeyPress()
+{
+    launcher.launchCubes();
 }
 
 void Cubestacular::handleWindowResize(int width, int height)

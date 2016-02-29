@@ -1,9 +1,6 @@
 #include "geometry.h"
 
-Geometry::Geometry()
-{
-
-}
+Geometry::Geometry() {}
 
 void Geometry::populateAttributes()
 {
@@ -18,17 +15,17 @@ void Geometry::populateAttributes()
 	}
 }
 
-const std::vector<glm::vec3>& Geometry::getVertices() const
+const std::vector<glm::vec3>& Geometry::getVertices()const
 {
 	return vertices;
 }
 
-const std::vector<glm::vec3>& Geometry::getNormals() const
+const std::vector<glm::vec3>& Geometry::getNormals()const
 {
 	return normals;
 }
 
-const std::vector<VertexAttribute>& Geometry::getAttributes() const
+const std::vector<VertexAttribute>& Geometry::getAttributes()const
 {
 	return attributes;
 }

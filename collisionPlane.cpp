@@ -1,6 +1,6 @@
 #include "collisionPlane.h"
 
-CollisionPlane::CollisionPlane() : depth(2), camera(new Camera()){}
+CollisionPlane::CollisionPlane() : depth(10), camera(new Camera()){}
 
 CollisionPlane::CollisionPlane(float depth, Camera* camera) : depth(depth), camera(camera)
 {
@@ -69,7 +69,7 @@ glm::vec4 CollisionPlane::worldFromScreenCoords(float winX, float winY)
 glm::vec4 CollisionPlane::cameraRayIntersection(glm::vec3 ray, glm::vec3 p0)
 {
 	ray = glm::normalize(ray);
-	float t = ( -1 * (glm::dot(p0, glm::vec3(0,0,-1)) + pow(depth, 2)) ) / (glm::dot(ray, glm::vec3(0.0,0.0,-1.0)));
+	float t = ( -1 * (glm::dot(p0, glm::vec3(0,0,-1)) + depth) ) / (glm::dot(ray, glm::vec3(0.0,0.0,-1.0)));
 	glm::vec3 temp = p0 + t * ray;
 	std::cout<<temp.x<<","<<temp.y<<","<<temp.z<<std::endl;
 	return glm::vec4(p0 + (t * ray), 1.0);

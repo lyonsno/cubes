@@ -12,6 +12,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+    Cubestacular * game = reinterpret_cast<Cubestacular *>(glfwGetWindowUserPointer(window));
+    game->handleKeyPress();
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -65,16 +67,16 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
     	double now = glfwGetTime();
-        double delta = now - game->getlastTime();
-        game->setLastTime(now);
+        double delta = now - game.getLastTime();
+        game.setLastTime(now);
 
-        game->increaseElapsed(delta);
+        game.increaseElapsed(delta);
 
-        while(game->getElapsed() >= game->getTimeStep()) // OPTIMAL_TIME = 1 / 60
+        while(game.getElapsed() >= game.getTimeStep()) // OPTIMAL_TIME = 1 / 60
         {
                  //tick
-
-                game->resetElapsed();
+        		game.stepSim();
+                game.resetElapsed();
         }
     	game.draw();
         // end the current frame (internally swaps the front and back buffers)

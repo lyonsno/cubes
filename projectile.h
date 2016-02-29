@@ -1,18 +1,35 @@
 #ifndef Projectile_H
 #define Projectile_H
 
+#include "glm/glm/glm.hpp"
+#include <math.h>
+#include <iostream>
+#include "object.h"
 class Projectile : public Object
 {
 private:
+	Object target;
 	glm::vec3 acceleration;
 	glm::vec3 velocity;
-	glm::vec3 target;
+	float timestep;
+	float V;
 	int children;
-	float timeStep;
+	bool detonated;
+	bool launched;
+	float G;
+	float PI;
+	float delta;
 
 public:
-	Projectile(const Geometry& geometry);
-	step(double timeStep);
-	const glm::vec3& getTarget();
+	Projectile(const Geometry& geometry, int children, Object target);
+	void step(float _timestep);
+	float calculateLaunchAngle();
+	Object& getTarget();
+	void launch(glm::vec3 start);
+	void setVelocityVector(float degrees);
+	void detonate();
+	bool hasDetonated();
+	bool hasLaunched();
+
 };
 #endif

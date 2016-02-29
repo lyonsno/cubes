@@ -1,39 +1,43 @@
-CFLAGS=$(shell pkg-config --cflags glfw3)
+CFLAGS=$(shell pkg-config --cflags glfw3)-stdlib=libc++ -std=c++11
 LIBS=$(shell pkg-config --static --libs glfw3)
 
-main: main.o camera.o shaderCreator.o cube.o light.o cubestacular.o object.o geometry.o collisionPlane.o cubeLauncher.o
-	g++ $(CFLAGS) -o main main.o camera.o shaderCreator.o cube.o light.o cubestacular.o geometry.o object.o collisionPlane.o cubeLauncher.o $(LIBS)
+main: main.o camera.o shaderCreator.o cube.o light.o cubestacular.o object.o geometry.o collisionPlane.o cubeLauncher.o projectile.o
+	clang++ $(CFLAGS) -o main main.o camera.o shaderCreator.o cube.o light.o cubestacular.o geometry.o object.o collisionPlane.o cubeLauncher.o projectile.o $(LIBS)
 
 main.o: main.cpp
-	g++ $(CFLAGS) -c main.cpp $(LIBS)
+	clang++ $(CFLAGS) -c main.cpp $(LIBS)
 
 cubestacular.o: cubestacular.cpp cubestacular.h
-	g++ $(CFLAGS) -c cubestacular.cpp $(LIBS)
+	clang++ $(CFLAGS) -c cubestacular.cpp $(LIBS)
 
 camera.o: camera.cpp camera.h
-	g++ $(CFLAGS) -c camera.cpp $(LIBS)
+	clang++ $(CFLAGS) -c camera.cpp $(LIBS)
 
 shaderCreator.o: shaderCreator.cpp shaderCreator.h
-	g++ $(CFLAGS) -c shaderCreator.cpp $(LIBS)
+	clang++ $(CFLAGS) -c shaderCreator.cpp $(LIBS)
 
 cube.o: cube.cpp cube.h
-	g++ $(CFLAGS) -c cube.cpp $(LIBS)
+	clang++ $(CFLAGS) -c cube.cpp $(LIBS)
 
 light.o: light.cpp light.h
-	g++ $(CFLAGS) -c light.cpp $(LIBS)
+	clang++ $(CFLAGS) -c light.cpp $(LIBS)
 
 object.o: object.cpp object.h
-	g++ $(CFLAGS) -c object.cpp $(LIBS)
+	clang++ $(CFLAGS) -c object.cpp $(LIBS)
 
 geometry.o: geometry.cpp geometry.h
-	g++ $(CFLAGS) -c geometry.cpp $(LIBS)
+	clang++ $(CFLAGS) -c geometry.cpp $(LIBS)
 
 collisionPlane.o: collisionPlane.cpp collisionPlane.h
-	g++ $(CFLAGS) -c collisionPlane.cpp $(LIBS)
+	clang++ $(CFLAGS) -c collisionPlane.cpp $(LIBS)
 
 cubeLauncher.o: cubeLauncher.cpp cubeLauncher.h
-	g++ $(CFLAGS) -c cubeLauncher.cpp $(LIBS)
+	clang++ $(CFLAGS) -c cubeLauncher.cpp $(LIBS)
+
+projectile.o: projectile.cpp projectile.h
+	clang++ $(CFLAGS) -c projectile.cpp $(LIBS)
+
 
 clean:
-	rm -rf main main.o cubestacular.o camera.o shaderCreator.o cube.o light.o geometry.o object.o collisionPlane.o cubeLauncher.o
+	rm -rf main main.o cubestacular.o camera.o shaderCreator.o cube.o light.o geometry.o object.o collisionPlane.o cubeLauncher.o projectile.o
 

@@ -16,9 +16,9 @@ protected:
 
 public:
 	Geometry();
-	const std::vector<glm::vec3>& getVertices() const;
-	const std::vector<glm::vec3>& getNormals() const;
-	const std::vector<VertexAttribute>& getAttributes() const;
+	const std::vector<glm::vec3>& getVertices()const;
+	const std::vector<glm::vec3>& getNormals()const;
+	const std::vector<VertexAttribute>& getAttributes()const;
 };
 
 #endif

@@ -1,25 +1,56 @@
 #include "cubeLauncher.h"
 
-CubeLauncher::CubeLauncher()
+CubeLauncher::CubeLauncher(double timestep) 
+: position(glm::vec3(0.0,0.0,0.0)), timestep(timestep) 
 {
 	
 }
 
-void CubeLauncher::addTarget(const vec3& target)
+void CubeLauncher::quebe(Projectile cube)
 {
-	targets.push_back(target);
+	cubes.push_back(cube);
 }
 
 void CubeLauncher::launchCubes()
 {
-	for (auto& target : targets)
+	// if (launching) return;
+	std::cout<<cubes.size()<<std::endl;
+	launching = true;
+	for (auto& cube : cubes)
 	{
-		lauchCube(target);
+		if ( !cube.hasLaunched() ) cube.launch(position);
+
 	}
 }
 
-void CubeLauncher::launchCube(const vec3& target)
+bool CubeLauncher::isLaunching()
 {
-	Object cube = Object(cubeData);
-	
+	return launching;
+}
+
+ std::vector<Projectile>& CubeLauncher::getCubes()
+{
+	return cubes;
+}
+
+void CubeLauncher::step()
+{
+	// if ( !launching ) return;
+	cubes.erase(
+		std::remove_if(
+			cubes.begin(), cubes.end(),
+			 [](Projectile cube){ return cube.hasDetonated(); }),
+		 cubes.end());
+	if ( cubes.empty() )
+	{
+		launching = false;
+		return;
+	}
+	for (auto& cube : cubes)
+	{
+		if (cube.hasLaunched())
+		{
+			cube.step(timestep);
+		}
+	}
 }

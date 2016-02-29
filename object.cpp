@@ -1,11 +1,11 @@
 #include "object.h"
 
-Object::Object(const Geometry& geometry) : geometry(geometry), position(glm::vec3()), modelMatrix(glm::mat4()), axis(glm::vec3(0,1,0))
+Object::Object( const Geometry& geometry) : geometry(geometry), position(glm::vec3()), modelMatrix(glm::mat4()), axis(glm::vec3(0,1,0))
 {
 
 }
 
-Object::Object(const Geometry& geometry, glm::vec3 position) : geometry(geometry), position(position), modelMatrix(glm::mat4()), axis(glm::vec3(0,1,0))
+Object::Object( const Geometry& geometry, glm::vec3 position) : geometry(geometry), position(position), modelMatrix(glm::mat4()), axis(glm::vec3(0,1,0))
 {
 
 }
@@ -21,7 +21,7 @@ void Object::updateModelMatrix()
 	modelMatrix = glm::translate(glm::mat4(), position) * rotationMatrix;
 }
 
-const Geometry& Object::getGeometry() const
+const Geometry& Object::getGeometry()
 {
 	return geometry;
 }
