@@ -35,22 +35,30 @@ bool CubeLauncher::isLaunching()
 
 void CubeLauncher::step()
 {
-	// if ( !launching ) return;
-	cubes.erase(
-		std::remove_if(
-			cubes.begin(), cubes.end(),
-			 [](Projectile cube){ return cube.hasDetonated(); }),
-		 cubes.end());
-	if ( cubes.empty() )
-	{
-		launching = false;
-		return;
-	}
 	for (auto& cube : cubes)
 	{
 		if (cube.hasLaunched())
 		{
 			cube.step(timestep);
 		}
+		if (cube.hasDetonated())
+		{
+			for (int i = 0; i < cube.getNumChildren(); i++)
+			{
+				explosions.push_back(Shard(cube.getGeometry()));
+				
+			}
+		}
+	}
+
+	cubes.erase(
+		std::remove_if(
+			cubes.begin(), cubes.end(),
+			 [](Projectile cube){ return cube.hasDetonated(); }),
+		 cubes.end());
+
+	if ( cubes.empty() )
+	{
+		launching = false;
 	}
 }

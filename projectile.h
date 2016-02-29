@@ -25,6 +25,7 @@ public:
 	void step(float _timestep);
 	float calculateLaunchAngle();
 	Object& getTarget();
+	int getNumChildren();
 	void launch(glm::vec3 start);
 	void setVelocityVector(float degrees);
 	void detonate();

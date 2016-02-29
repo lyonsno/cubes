@@ -1,8 +1,8 @@
 CFLAGS=$(shell pkg-config --cflags glfw3)-stdlib=libc++ -std=c++11
 LIBS=$(shell pkg-config --static --libs glfw3)
 
-main: main.o camera.o shaderCreator.o cube.o light.o cubestacular.o object.o geometry.o collisionPlane.o cubeLauncher.o projectile.o
-	clang++ $(CFLAGS) -o main main.o camera.o shaderCreator.o cube.o light.o cubestacular.o geometry.o object.o collisionPlane.o cubeLauncher.o projectile.o $(LIBS)
+main: main.o camera.o shaderCreator.o cube.o light.o cubestacular.o object.o geometry.o collisionPlane.o cubeLauncher.o projectile.o shard.o
+	clang++ $(CFLAGS) -o main main.o camera.o shaderCreator.o cube.o light.o cubestacular.o geometry.o object.o collisionPlane.o cubeLauncher.o projectile.o shard.o $(LIBS)
 
 main.o: main.cpp
 	clang++ $(CFLAGS) -c main.cpp $(LIBS)
@@ -22,7 +22,7 @@ cube.o: cube.cpp cube.h
 light.o: light.cpp light.h
 	clang++ $(CFLAGS) -c light.cpp $(LIBS)
 
-object.o: object.cpp object.h
+object.o: object.cpp object.h geometry.o
 	clang++ $(CFLAGS) -c object.cpp $(LIBS)
 
 geometry.o: geometry.cpp geometry.h
@@ -34,9 +34,11 @@ collisionPlane.o: collisionPlane.cpp collisionPlane.h
 cubeLauncher.o: cubeLauncher.cpp cubeLauncher.h
 	clang++ $(CFLAGS) -c cubeLauncher.cpp $(LIBS)
 
-projectile.o: projectile.cpp projectile.h
+projectile.o: projectile.cpp projectile.h object.o
 	clang++ $(CFLAGS) -c projectile.cpp $(LIBS)
 
+shard.o: shard.cpp shard.h object.o
+	clang++ $(CFLAGS) -c shard.cpp $(LIBS)
 
 clean:
 	rm -rf main main.o cubestacular.o camera.o shaderCreator.o cube.o light.o geometry.o object.o collisionPlane.o cubeLauncher.o projectile.o

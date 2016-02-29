@@ -37,6 +37,11 @@ Object& Projectile::getTarget()
 	return target;
 }
 
+int Projectile::getNumChildren()
+{
+	return children;
+}
+
 float Projectile::calculateLaunchAngle()
 {
 	glm::vec3 targetPos = target.getPosition();
