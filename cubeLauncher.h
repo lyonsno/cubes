@@ -18,7 +18,7 @@ private:
 
 public:
 	CubeLauncher(double timestep);
-	//get it? we're queing it..h
+	//get it? we're queing it.
 	void quebe(Projectile cube);
 	void launchCubes();
 	void step();
